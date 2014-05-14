@@ -37,7 +37,7 @@ object ConfigrityBuild extends Build {
   lazy val minimalSettings = Defaults.defaultSettings ++ Seq(
     organization := "org.streum",
     version := "1.0.0",
-    licenses := Seq("GNU LesserGPLv3" -> url("http://www.gnu.org/licenses/lgpl.html")),
+    licenses += ("LGPL-3.0", url("https://www.gnu.org/licenses/lgpl.txt")),
     homepage := Some(url("https://github.com/paradigmatic/Configrity")),
     scalaVersion := "2.10.2",
     crossScalaVersions := Seq( "2.10.2", "2.11.0" )
@@ -63,19 +63,20 @@ object ConfigrityBuild extends Build {
     )
 
 
-  lazy val publishSettings = Seq(
-    publishMavenStyle := true,
-    publishTo <<= version { (v: String) =>
-      val nexus = "https://oss.sonatype.org/"
-      if (v.trim.endsWith("SNAPSHOT")) 
-	Some("snapshots" at nexus + "content/repositories/snapshots") 
-      else
-	Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-    },
-    publishArtifact in Test := false,
-    pomIncludeRepository := { x => false },
-    pomExtra := requiredPOMextra    
-  )
+  // lazy val publishSettings = Seq(
+  //   publishMavenStyle := true,
+  //   publishTo <<= version { (v: String) =>
+  //     val nexus = "https://oss.sonatype.org/"
+  //     if (v.trim.endsWith("SNAPSHOT")) 
+  // Some("snapshots" at nexus + "content/repositories/snapshots") 
+  //     else
+  // Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+  //   },
+  //   publishArtifact in Test := false,
+  //   pomIncludeRepository := { x => false },
+  //   pomExtra := requiredPOMextra    
+  // )
+  lazy val publishSettings = bintray.Plugin.bintrayPublishSettings
 
 
   lazy val requiredPOMextra = {
